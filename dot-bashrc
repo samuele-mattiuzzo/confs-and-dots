@@ -1,0 +1,85 @@
+#   paths
+#   ------------------------------------------
+
+#   git completion (brew install git-completion)
+#   ------------------------------------------
+if [ -f ~/.git-completion.bash ]; then
+  . ~/.git-completion.bash
+fi
+
+#   ps1
+#   ------------------------------------------
+parse_git_branch() {
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+#export PS1="\u@\h \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
+export PS1='\[\033[0;36m\]\w\[\033[0;36m\]\[\033[0;32m\]$(parse_git_branch)\n\[\033[0;32m\]└─\[\033[0m\033[0;32m\] \$\[\033[0m\033[0;32m\] ▶\[\033[0m\] '
+
+#   improved terminal commands
+#   ------------------------------------------
+alias cp='cp -iv'                           # Preferred 'cp' implementation
+alias mv='mv -iv'                           # Preferred 'mv' implementation
+alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
+alias ll='ls -FGlAhp'                       # Preferred 'ls' implementation
+alias less='less -FSRXc'                    # Preferred 'less' implementation
+#cd() { builtin cd "$@"; ll; }               # Always list directory contents upon 'cd'
+alias cd..='cd ../'                         # Go back 1 directory level (for fast typers)
+alias ..='cd ../'                           # Go back 1 directory level
+alias ...='cd ../../'                       # Go back 2 directory levels
+alias .3='cd ../../../'                     # Go back 3 directory levels
+alias .4='cd ../../../../'                  # Go back 4 directory levels
+alias .5='cd ../../../../../'               # Go back 5 directory levels
+alias .6='cd ../../../../../../'            # Go back 6 directory levels
+alias edit='gedit'                          # edit:         Opens any file in gedit editor
+alias f='nautilus .'                        # f:            Opens current directory in Nautilus
+alias ~="cd ~"                              # ~:            Go Home
+alias c='clear'                             # c:            Clear terminal display
+alias which='type -all'                     # which:        Find executables
+alias path='echo -e ${PATH//:/\\n}'         # path:         Echo all executable Paths
+alias show_options='shopt'                  # Show_options: display bash options settings
+alias fix_stty='stty sane'                  # fix_stty:     Restore terminal settings when screwed up
+alias cic='set completion-ignore-case On'   # cic:          Make tab-completion case-insensitive
+alias repoff='xset r off'
+alias repon='xset r on'
+mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
+
+#   lr:  Full Recursive Directory Listing
+#   ------------------------------------------
+alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'' | less'
+
+#   memHogsTop, memHogsPs:  Find memory hogs
+#   -----------------------------------------------------
+alias memHogsTop='top -l 1 -o rsize | head -20'
+alias memHogsPs='ps wwaxm -o pid,stat,vsize,rss,time,command | head -10'
+
+#   cpuHogs:  Find CPU hogs
+#   -----------------------------------------------------
+alias cpu_hogs='ps wwaxr -o pid,stat,%cpu,time,command | head -10'
+
+#   topForever:  Continual 'top' listing (every 10 seconds)
+#   -----------------------------------------------------
+alias topForever='top -l 9999999 -s 10 -o cpu'
+
+#   ttop:  Recommended 'top' invocation to minimize resources
+#   ------------------------------------------------------------
+alias ttop="top -R -F -s 10 -o rsize"
+
+#   my_ps: List processes owned by my user:
+#   ------------------------------------------------------------
+my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,start,time,bsdtime,command ; }
+
+
+# youtube-dl
+alias ytdl="youtube-dl -f 'mp4[height<=480]+mp4' --no-part --youtube-skip-dash-manifest --ignore-errors"
+
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/Workspace
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
